@@ -180,6 +180,8 @@ void get_audio_volume(long* outvol) {
 	maxv -= minv;
 	minv = 0;
 	*outvol = 100 * (*outvol) / maxv;
+	// Round to nearest 5
+	*outvol = (*outvol + 2) / 5 * 5;
 
 	snd_mixer_close(handle);
 }
