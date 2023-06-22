@@ -254,11 +254,11 @@ int main() {
 		return 1;
 	}
 
-	const size_t brightness_max_length = 8;
+	//const size_t brightness_max_length = 8;
 	const size_t battery_max_length = 16;
 	const size_t keyboard_max_length = 4;
 	const size_t time_max_length = 32;
-	char brightness[brightness_max_length];
+	//char brightness[brightness_max_length];
 	char battery0[battery_max_length];
 	char battery1[battery_max_length];
 	char kb[keyboard_max_length];
@@ -267,7 +267,7 @@ int main() {
 
 	int sleep_duration;
 	while (true) {
-		get_screen_brightness(brightness, brightness_max_length);
+		//get_screen_brightness(brightness, brightness_max_length);
 		get_battery_status(0, battery0, battery_max_length);
 		get_battery_status(1, battery1, battery_max_length);
 		get_keyboard_layout(display, kb, keyboard_max_length);
@@ -276,8 +276,9 @@ int main() {
 		sleep_duration = 60 - get_time(time, time_max_length);
 
         // Print the status line
-		printf(" bklight: %s | bat: %s, %s | ⌨ %s | 🔊 %ld%% | %s",
-		brightness,
+		//printf(" bklight: %s | bat: %s, %s | ⌨ %s | 🔊 %ld%% | %s",
+		printf(" bat: %s, %s | ⌨ %s | 🔊 %ld%% | %s",
+		//brightness,
 		battery0,
 		battery1,
 		kb,
