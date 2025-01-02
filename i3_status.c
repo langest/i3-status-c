@@ -239,30 +239,30 @@ void catch_signal(int signo, siginfo_t* sinfo, void *context) {
     }
 }
 
-void print_status_line(const char* battery0, const char* battery1,
-                      const char* kb, long volume, const char* time) {
-    printf("🔋%s, 🔋%s | ⌨️%s | 🔊%ld%% | %s\n",
-           battery0,
-           battery1,
-           kb,
-           volume,
-           time);
+Display* wait_for_x_display(void) {
+    for (int i = 0; i < 5; i++) {
+        Display* display = XOpenDisplay(NULL);
+        if (display) return display;
+        sleep(1);
+    }
+    return NULL;
 }
 
 int main(void) {
+    Display* display = wait_for_x_display();
+    if (!display) {
+        DEBUG_ERROR("Failed to connect to X display\n");
+        return 1;
+    }
+
     struct sigaction action = {0};
     action.sa_sigaction = &catch_signal;
     action.sa_flags = SA_SIGINFO;
 
     if (sigaction(SIGUSR1, &action, NULL) < 0) {
         DEBUG_ERROR("Failed to register SIGUSR1 handler\n");
+        XCloseDisplay(display);
         return 2;
-    }
-
-    Display* display = XOpenDisplay(NULL);
-    if (!display) {
-        DEBUG_ERROR("Failed to open display\n");
-        return 1;
     }
 
     char battery0[16] = {0};
@@ -280,7 +280,9 @@ int main(void) {
         int sleep_duration = get_time(time_str, sizeof(time_str));
         if (sleep_duration < 0) sleep_duration = 60;
 
-        print_status_line(battery0, battery1, kb, volume, time_str);
+        printf("🔋%s, 🔋%s | ⌨️%s | 🔊%ld%% | %s\n",
+               battery0, battery1, kb, volume, time_str);
+        fflush(stdout);
 
         if (force_update) {
             force_update = 0;
