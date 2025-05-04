@@ -280,7 +280,7 @@ int main(void) {
         int sleep_duration = get_time(time_str, sizeof(time_str));
         if (sleep_duration < 0) sleep_duration = 60;
 
-        printf("🔋%s, 🔋%s | ⌨️%s | 🔊%ld%% | %s\n",
+        printf("🔋%s, %s | ⌨️%s | 🔊%ld%% | %s\n",
                battery0, battery1, kb, volume, time_str);
         fflush(stdout);
 
